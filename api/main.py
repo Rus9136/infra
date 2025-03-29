@@ -1,62 +1,21 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.openapi.utils import get_openapi
-import uvicorn
+from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
+from fastapi.responses import HTMLResponse
 
-from database import engine, Base
-from routers import receipts
-
-# Создание таблиц в БД (если они еще не существуют)
-Base.metadata.create_all(bind=engine)
-
-# Создание экземпляра FastAPI (оставляем основные параметры)
+# Отключаем стандартные маршруты документации
 app = FastAPI(
     title="Telegram Mini App API",
     description="API для работы с чеками в Telegram Mini App",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url=None,  # Отключаем стандартный /docs
+    redoc_url=None  # Отключаем стандартный /redoc
 )
 
-# Добавление функции для настройки OpenAPI схемы
-def custom_openapi():
-    if app.openapi_schema:
-        return app.openapi_schema
-    openapi_schema = get_openapi(
+# Создаем собственные маршруты документации
+@app.get("/api/custom-docs", response_class=HTMLResponse)
+async def get_custom_docs():
+    return get_swagger_ui_html(
+        openapi_url="/api/openapi.json",
         title="Telegram Mini App API",
-        version="1.0.0",
-        description="API для работы с чеками в Telegram Mini App",
-        routes=app.routes,
+        swagger_js_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js",
+        swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css"
     )
-    # Задаем явно версию OpenAPI
-    openapi_schema["openapi"] = "3.0.2"
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
-
-# Заменяем стандартную схему OpenAPI на нашу
-app.openapi = custom_openapi
-
-# Настройка CORS для доступа из веб-приложения
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "https://madlen.space",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Подключение роутеров
-app.include_router(receipts.router)
-
-# Корневой маршрут
-@app.get("/")
-async def root():
-    return {"message": "Telegram Mini App API работает! Документация доступна по адресу /docs"}
-
-# Для локального запуска (при разработке)
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
