@@ -9,7 +9,7 @@ load_dotenv()
 
 # Получить параметры подключения к БД
 DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "your_secure_password")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "ByEIAKw86Q1xPrXMom69896")
 DB_HOST = os.getenv("DB_HOST", "postgres")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "telegram_miniapp_db")
