@@ -1,10 +1,18 @@
-.DS_Store
-node_modules/
-package-lock.json
-npm-debug.log
-yarn-error.log
+# Виртуальное окружение
+.venv/
+venv/
+
+# Файлы окружения с секретами
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+
+# SSL сертификаты и ключи
+certbot/conf/archive/
+certbot/conf/live/
+certbot/conf/accounts/
+certbot/conf/renewal/
+
+# Другие файлы, которые не нужно отслеживать
+__pycache__/
+*.pyc
+*.pyo
+*.log
