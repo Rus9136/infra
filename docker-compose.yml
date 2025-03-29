@@ -21,3 +21,20 @@ services:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    
+  postgres:
+    image: postgres:14
+    container_name: telegram_app_postgres
+    environment:
+      POSTGRES_DB: telegram_miniapp_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ByEIAKw86Q1xPrXMom69896
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+
+volumes:
+  postgres_data:
