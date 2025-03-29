@@ -43,7 +43,7 @@ services:
     container_name: telegram_app_api
     environment:
       - DB_USER=postgres
-      - DB_PASSWORD=your_secure_password
+      - DB_PASSWORD=ByEIAKw86Q1xPrXMom69896
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=telegram_miniapp_db
