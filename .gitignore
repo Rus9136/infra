@@ -5,6 +5,8 @@ venv/
 # Файлы окружения с секретами
 .env
 
+nginx/.DS_Store
+
 # SSL сертификаты и ключи
 certbot/conf/archive/
 certbot/conf/live/

@@ -1,35 +1,23 @@
-from sqlalchemy import create_engine, Column, Integer, String, Numeric, DateTime, MetaData
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 
-# Загрузить переменные окружения из .env файла, если он существует
 load_dotenv()
 
-# Получить параметры подключения к БД
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "ByEIAKw86Q1xPrXMom69896")
-DB_HOST = os.getenv("DB_HOST", "postgres")
+DB_HOST = os.getenv("DB_HOST", "db")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "telegram_miniapp_db")
+DB_USER = os.getenv("DB_USER", "postgres")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
 
-# Создание URL для подключения к PostgreSQL
 SQLALCHEMY_DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-# Создание движка SQLAlchemy
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
-
-# Создание сессии
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Создание базового класса для моделей
 Base = declarative_base()
 
-# Создание метаданных
-metadata = MetaData()
-
-# Функция для получения сессии БД
 def get_db():
     db = SessionLocal()
     try:

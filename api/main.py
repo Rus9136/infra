@@ -1,21 +1,21 @@
-from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI
+import uvicorn
+from api.database import engine, Base
 
-# Отключаем стандартные маршруты документации
-app = FastAPI(
-    title="Telegram Mini App API",
-    description="API для работы с чеками в Telegram Mini App",
-    version="1.0.0",
-    docs_url=None,  # Отключаем стандартный /docs
-    redoc_url=None  # Отключаем стандартный /redoc
-)
+app = FastAPI(title="Madlen API")
 
-# Создаем собственные маршруты документации
-@app.get("/api/custom-docs", response_class=HTMLResponse)
-async def get_custom_docs():
-    return get_swagger_ui_html(
-        openapi_url="/api/openapi.json",
-        title="Telegram Mini App API",
-        swagger_js_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js",
-        swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css"
-    )
+# Импорт роутеров
+from api.routers import router as main_router
+
+# Создание таблиц в базе данных
+Base.metadata.create_all(bind=engine)
+
+# Подключение роутеров
+app.include_router(main_router)
+
+@app.get("/")
+async def root():
+    return {"message": "API работает!"}
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
