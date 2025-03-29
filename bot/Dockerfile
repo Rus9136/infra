@@ -6,3 +6,4 @@ COPY . /app
 RUN pip install --no-cache-dir pyTelegramBotAPI
 
 CMD ["python3", "bot.py"]
+

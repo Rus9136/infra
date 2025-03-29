@@ -28,12 +28,31 @@ services:
     environment:
       POSTGRES_DB: telegram_miniapp_db
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ByEIAKw86Q1xPrXMom69896
+      POSTGRES_PASSWORD: your_secure_password
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: telegram_app_api
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=your_secure_password
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=telegram_miniapp_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app
+    depends_on:
+      - postgres
     restart: always
 
 volumes:
