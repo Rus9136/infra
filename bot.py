@@ -7,7 +7,8 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = InlineKeyboardMarkup()
-    web_app = WebAppInfo(url="https://8e40-149-27-215-155.ngrok-free.app/index.html")
+    web_app = WebAppInfo(url="http://109.205.178.74") 
+ # web_app = WebAppInfo(url="http://109.205.178.74/index.html"/index.html")
     #web_app = WebAppInfo(url="https: // 8e40 - 149 - 27 - 215 - 155.ngrok-free.app/index.html") # заменишь на свой URL
     markup.add(InlineKeyboardButton(text="Открыть мини-апп", web_app=web_app))
     bot.send_message(message.chat.id, "Нажми на кнопку ниже, чтобы открыть мини-апп", reply_markup=markup)
