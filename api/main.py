@@ -9,12 +9,13 @@ from routers import receipts
 Base.metadata.create_all(bind=engine)
 
 # Создание экземпляра FastAPI
+# Нужно изменить на:
 app = FastAPI(
     title="Telegram Mini App API",
     description="API для работы с чеками в Telegram Mini App",
-    version="1.0.0"
+    version="1.0.0",
+    openapi_version="3.1.0"  # Добавить эту строку
 )
-
 # Настройка CORS для доступа из веб-приложения
 origins = [
     "http://localhost",
